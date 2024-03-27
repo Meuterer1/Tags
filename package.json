@@ -1,0 +1,34 @@
+{
+  "name": "tags",
+  "main": "index.tsx",
+  "scripts": {
+    "start": "webpack-dev-server --mode=development",
+    "build": "webpack --mode=production"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.11.4",
+    "@emotion/styled": "^11.11.0",
+    "@mui/material": "^5.15.14",
+    "babel": "^6.23.0",
+    "copy-webpack-plugin": "^12.0.2",
+    "css-loader": "^6.10.0",
+    "html-webpack-plugin": "^5.5.3",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-query": "^3.39.3",
+    "react-router": "^6.19.0",
+    "react-router-dom": "^6.21.3",
+    "style-loader": "^3.3.4",
+    "styled-components": "^6.1.1",
+    "webpack": "^5.89.0",
+    "webpack-dev-server": "^4.15.1"
+  },
+  "devDependencies": {
+    "@mui/icons-material": "^5.15.14",
+    "@types/react": "^18.2.37",
+    "@types/react-dom": "^18.2.15",
+    "ts-loader": "^9.5.1",
+    "typescript": "^5.2.2",
+    "webpack-cli": "^5.1.4"
+  }
+}
