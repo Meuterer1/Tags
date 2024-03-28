@@ -2,7 +2,14 @@ import FirstPageIcon from '@mui/icons-material/FirstPage'
 import KeyboardArrowLeft from '@mui/icons-material/KeyboardArrowLeft'
 import KeyboardArrowRight from '@mui/icons-material/KeyboardArrowRight'
 import LastPageIcon from '@mui/icons-material/LastPage'
-import { TableCell, TableHead, TextField } from '@mui/material'
+import {
+  TableCell,
+  TableHead,
+  TableSortLabel,
+  TextField,
+  Toolbar,
+  Typography
+} from '@mui/material'
 import Box from '@mui/material/Box'
 import IconButton from '@mui/material/IconButton'
 import Paper from '@mui/material/Paper'
@@ -14,7 +21,8 @@ import TablePagination from '@mui/material/TablePagination'
 import TableRow from '@mui/material/TableRow'
 import { useTheme } from '@mui/material/styles'
 import * as React from 'react'
-import { Tag } from '../interfaces/interfaces'
+import Error from '../componnets/errorPage'
+import { Tag, TagError } from '../interfaces/interfaces'
 
 interface TablePaginationActionsProps {
   count: number
@@ -27,7 +35,8 @@ interface TablePaginationActionsProps {
 }
 
 interface CustomPaginationActionsTableProps {
-  tags: Tag[] | any
+  tags: Tag[] | TagError | any
+  status: string
 }
 
 function TablePaginationActions(props: TablePaginationActionsProps) {
@@ -102,9 +111,11 @@ function TablePaginationActions(props: TablePaginationActionsProps) {
 
 const CustomPaginationActionsTable: React.FC<
   CustomPaginationActionsTableProps
-> = ({ tags }) => {
+> = ({ tags, status }) => {
   const [page, setPage] = React.useState(0)
   const [rowsPerPage, setRowsPerPage] = React.useState(5)
+  const [sortBy, setSortBy] = React.useState<string>('')
+  const [isDescending, setIsDescending] = React.useState<boolean>(false)
 
   const handleChangePage = (
     event: React.MouseEvent<HTMLButtonElement> | null,
@@ -113,45 +124,109 @@ const CustomPaginationActionsTable: React.FC<
     setPage(newPage)
   }
 
+  const sortTags = (items: Tag[], sortBy: string, isDescending: boolean) => {
+    if (sortBy === 'tags') {
+      items.sort((a, b) => {
+        if (!isDescending) {
+          return a.name.localeCompare(b.name)
+        } else {
+          return b.name.localeCompare(a.name)
+        }
+      })
+    } else if (sortBy === 'count') {
+      items.sort((a, b) => {
+        if (!isDescending) {
+          return a.count - b.count
+        } else {
+          return b.count - a.count
+        }
+      })
+    }
+  }
+
+  const handleSortChange = (sortBy: string) => {
+    if (sortBy === sortBy) {
+      setIsDescending(!isDescending)
+    } else {
+      setIsDescending(false)
+    }
+    setSortBy(sortBy)
+    sortTags(tags.items, sortBy, isDescending)
+  }
+
   const handleChangeRowsPerPage = (
     event: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
   ) => {
     const rowsValue = parseInt(event.target.value, 10)
-    if (!isNaN(rowsValue) && rowsValue >= 0) {
+    if (!isNaN(rowsValue) && rowsValue >= 0 && rowsPerPage !== rowsValue) {
       setRowsPerPage(rowsValue)
       setPage(0)
+      sortTags(tags.items, sortBy, !isDescending)
     } else {
       setRowsPerPage(0)
     }
   }
 
-  console.log('tags w tabeli', tags)
+  console.log('tags', tags)
 
-  if (tags === false) {
+  if (status === 'loading') {
     return <h1>Loading...</h1>
   }
 
-  if (!tags || tags.length === 0) {
+  if (!tags || tags.items.length === 0) {
     return <h1>No data available</h1>
+  }
+
+  if (status === 'error') {
+    return <Error tags={tags} />
   }
 
   return (
     <TableContainer component={Paper}>
+      <Toolbar sx={{ pl: { sm: 2 }, pr: { xs: 2, sm: 2 }, pt: { sm: 2 } }}>
+        <Typography
+          sx={{ flex: '1 1 100%' }}
+          variant="h5"
+          id="tableTitle"
+          component="div"
+        >
+          Tags
+        </Typography>
+
+        <TextField
+          id="standard-basic"
+          label="Rows per page"
+          variant="standard"
+          placeholder={rowsPerPage.toString()}
+          name="rowsPerPage"
+          onChange={handleChangeRowsPerPage}
+        />
+      </Toolbar>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
         <TableHead>
           <TableRow>
-            <TableCell>
-              <TextField
-                id="standard-basic"
-                label="Rows per page"
-                variant="standard"
-                placeholder={rowsPerPage.toString()}
-                name="rowsPerPage"
-                onChange={handleChangeRowsPerPage}
-              />
+            <TableCell
+              component="th"
+              scope="row"
+              onClick={() => handleSortChange('tags')}
+            >
+              <TableSortLabel direction={isDescending ? 'desc' : 'asc'}>
+                Tag
+              </TableSortLabel>
+            </TableCell>
+            <TableCell
+              component="th"
+              scope="row"
+              onClick={() => handleSortChange('count')}
+              style={{ width: 160 }}
+            >
+              <TableSortLabel direction={isDescending ? 'desc' : 'asc'}>
+                Count
+              </TableSortLabel>
             </TableCell>
           </TableRow>
         </TableHead>
+
         <TableBody>
           {(
             tags.items.length > 0 &&
@@ -164,22 +239,15 @@ const CustomPaginationActionsTable: React.FC<
               <TableCell component="th" scope="row">
                 {tag.name}
               </TableCell>
-              <TableCell style={{ width: 160 }} align="right">
-                {tag.count}
-              </TableCell>
+              <TableCell style={{ width: 160 }}>{tag.count}</TableCell>
             </TableRow>
           ))}
-          {/* {emptyRows > 0 && (
-            <TableRow style={{ height: 53 * emptyRows }}>
-              <TableCell colSpan={6} />
-            </TableRow>
-          )} */}
         </TableBody>
         <TableFooter>
           <TableRow>
             <TablePagination
               colSpan={3}
-              count={10}
+              count={tags.items.length}
               rowsPerPage={rowsPerPage}
               page={page}
               onPageChange={handleChangePage}
