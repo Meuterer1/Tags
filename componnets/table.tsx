@@ -200,6 +200,9 @@ const CustomPaginationActionsTable: React.FC<
           placeholder={rowsPerPage.toString()}
           name="rowsPerPage"
           onChange={handleChangeRowsPerPage}
+          type="number"
+          defaultValue={rowsPerPage}
+          inputProps={{ min: 0 }}
         />
       </Toolbar>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">
