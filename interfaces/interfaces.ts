@@ -18,3 +18,18 @@ export interface TagsQuery {
   quota_max: number
   quota_remaining: number
 }
+
+export interface TablePaginationActionsProps {
+  count: number
+  page: number
+  rowsPerPage: number
+  onPageChange: (
+    event: React.MouseEvent<HTMLButtonElement>,
+    newPage: number
+  ) => void
+}
+
+export interface CustomPaginationActionsTableProps {
+  tags: Tag[] | TagError | any
+  status: string
+}
