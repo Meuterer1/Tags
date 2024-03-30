@@ -79,18 +79,16 @@ const CustomPaginationActionsTable: React.FC<
     }
   }
 
-  console.log('tags', tags)
-
   if (status === 'loading') {
     return <h1>Loading...</h1>
   }
 
-  if (!tags || tags.items.length === 0) {
-    return <h1>No data available</h1>
-  }
-
   if (status === 'error') {
     return <Error tags={tags} />
+  }
+
+  if (!tags || tags.items.length === 0) {
+    return <h1>No data available</h1>
   }
 
   return (
@@ -115,6 +113,12 @@ const CustomPaginationActionsTable: React.FC<
           type="number"
           defaultValue={rowsPerPage}
           inputProps={{ min: 0 }}
+          sx={{
+            width: 100,
+            '& input': {
+              textAlign: 'center'
+            }
+          }}
         />
       </Toolbar>
       <Table sx={{ minWidth: 500 }} aria-label="custom pagination table">

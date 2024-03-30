@@ -33,3 +33,7 @@ export interface CustomPaginationActionsTableProps {
   tags: Tag[] | TagError | any
   status: string
 }
+
+export interface ErrorProps {
+  tags: TagError
+}

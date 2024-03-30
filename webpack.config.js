@@ -35,18 +35,5 @@ module.exports = {
         use: ['style-loader', 'css-loader']
       }
     ]
-  },
-  plugins: [
-    new HtmlWebpackPlugin({
-      template: path(__dirname, '.', 'public', 'index.html')
-    }),
-    new CopyWebpackPlugin({
-      patterns: [
-        {
-          from: path(__dirname, '.', 'public', 'assets'),
-          to: path(__dirname, '.', 'build', 'assets')
-        }
-      ]
-    })
-  ]
+  }
 }

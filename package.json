@@ -3,7 +3,6 @@
   "main": "index.tsx",
   "scripts": {
     "start": "webpack-dev-server --mode=development",
-    "build": "webpack --mode=production",
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
   },

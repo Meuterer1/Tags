@@ -1,14 +1,13 @@
 import { Box, Typography } from '@mui/material'
 import { purple } from '@mui/material/colors'
-import { TagError } from '../interfaces/interfaces'
+import { ErrorProps } from '../interfaces/interfaces'
 
 const primary = purple[800]
 
-interface ErrorProps {
-  tags: TagError
-}
-
 const Error: React.FC<ErrorProps> = ({ tags }) => {
+  if (!tags || typeof tags !== 'object') {
+    return null
+  }
   return (
     <Box
       sx={{

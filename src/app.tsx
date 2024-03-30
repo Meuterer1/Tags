@@ -16,6 +16,7 @@ const App: React.FC = () => {
     refetchOnMount: false,
     refetchOnWindowFocus: false
   })
+
   return (
     <Container sx={{ mt: 5 }}>
       <CustomPaginationActionsTable tags={tagsQuery} status={status} />
