@@ -7,8 +7,7 @@ export default {
   component: Pagination,
   argTypes: {
     count: {
-      control: { type: 'number' },
-      defaultValue: 5
+      control: { type: 'number' }
     }
   },
   args: {
@@ -48,6 +47,7 @@ export const DefaultPagination = (args: TablePaginationActionsProps) => {
       page={pageNumber}
       onPageChange={handlePageChange}
       rowsPerPage={1}
+      count={5}
     />
   )
 }
